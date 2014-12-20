@@ -6,8 +6,6 @@
       <th>Customer</th>
       <th>Store</th>
       <th></th>
-      <th></th>
-      <th></th>
     </tr>
   </thead>
 
@@ -17,13 +15,7 @@
         <td><%= matching.customer_id %></td>
         <td><%= matching.store_id %></td>
         <td><%= link_to 'Show', matching %></td>
-        <td><%= link_to 'Edit', edit_matching_path(matching) %></td>
-        <td><%= link_to 'Destroy', matching, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Matching', new_matching_path %>
