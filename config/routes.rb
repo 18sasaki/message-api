@@ -1,10 +1,17 @@
 MassageApi::Application.routes.draw do
   namespace :api do
-    resources :matchings
+    resources :matchings do
+      collection do
+        post 'reservation'
+        post 'cancellation'
+        get  'reservation_list'
+      end
+    end
 
     resources :stores do
       collection do
         post 'edit'
+        get  'search'
       end
     end
 

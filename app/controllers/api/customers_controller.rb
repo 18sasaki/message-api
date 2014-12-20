@@ -14,7 +14,7 @@ class Api::CustomersController < Api::ApiBaseController
     result = 'true'
   rescue => e
     p ">>>>>>>>>>> error! : #{e}"
-    Rails.logger.warning ">>>>>>>>>>> error! : #{e}"
+    Rails.logger.error ">>>>>>>>>>> error! : #{e}"
     result = 'false'
   ensure
     render json: {result: result}

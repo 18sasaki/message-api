@@ -15,7 +15,7 @@
   <tbody>
     <% @stores.each do |store| %>
       <tr>
-        <td><%= store.user_id %></td>
+        <td><%= store.id %> : <%= store.user_id %></td>
         <td><%= link_to store.name, store %></td>
         <td><%= store.address %></td>
         <td><%= store.geo_data %></td>

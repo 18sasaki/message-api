@@ -1,74 +1,65 @@
 class Api::MatchingsController < Api::ApiBaseController
-  before_action :set_matching, only: [:show, :edit, :update, :destroy]
+  def reservation
+    matching_params = ActionController::Parameters.new(params).permit(:customer_id, :store_id)
 
-  # GET /matchings
-  # GET /matchings.json
-  def index
-    @matchings = Matching.all
-  end
-
-  # GET /matchings/1
-  # GET /matchings/1.json
-  def show
-  end
-
-  # GET /matchings/new
-  def new
-    @matching = Matching.new
-  end
-
-  # GET /matchings/1/edit
-  def edit
-  end
-
-  # POST /matchings
-  # POST /matchings.json
-  def create
-    @matching = Matching.new(matching_params)
-
-    respond_to do |format|
-      if @matching.save
-        format.html { redirect_to @matching, notice: 'Matching was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @matching }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @matching.errors, status: :unprocessable_entity }
-      end
+    if Matching.find_by(customer_id: matching_params[:customer_id], store_id: matching_params[:store_id], enable_flg: 1).present?
+      result  = 'false'
+      message = '既に予約済です'
+    else
+      Matching.new(matching_params.merge({enable_flg: 1})).save!
+      result  = 'true'
+      message = '予約に成功しました'
     end
+  rescue => e
+    p ">>>>>>>>>>> error! : #{e}"
+    Rails.logger.error ">>>>>>>>>>> error! : #{e}"
+    result  = 'false'
+    message = '予約に失敗しました'
+  ensure
+    render json: { result: result, message: message }
   end
 
-  # PATCH/PUT /matchings/1
-  # PATCH/PUT /matchings/1.json
-  def update
-    respond_to do |format|
-      if @matching.update(matching_params)
-        format.html { redirect_to @matching, notice: 'Matching was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @matching.errors, status: :unprocessable_entity }
-      end
-    end
+  def cancellation
+    matching = Matching.find_by(id: params[:id])
+
+    matching.update(enable_flg: 0)
+    result  = 'true'
+    message = '予約を取り消しました'
+  rescue => e
+    p ">>>>>>>>>>> error! : #{e}"
+    Rails.logger.error ">>>>>>>>>>> error! : #{e}"
+    result  = 'false'
+    message = '予約の取り消しに失敗しました'
+  ensure
+    render json: { result: result, message: message }
   end
 
-  # DELETE /matchings/1
-  # DELETE /matchings/1.json
-  def destroy
-    @matching.destroy
-    respond_to do |format|
-      format.html { redirect_to matchings_url }
-      format.json { head :no_content }
-    end
-  end
+  def reservation_list
+    mt = Matching.arel_table
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_matching
-      @matching = Matching.find(params[:id])
+    case params[:user_type]
+    when '0'
+      st = Store.arel_table
+
+      condition = mt[:customer_id].eq(params[:user_id])
+      join_conditions = mt.join(st).on(st[:id].eq(mt[:store_id])).join_sources
+      select_columns = ['*', 'stores.name as name']
+    when '1'
+      ct = Customer.arel_table
+
+      condition = mt[:store_id].eq(params[:user_id])
+      join_conditions = mt.join(ct).on(ct[:id].eq(mt[:customer_id])).join_sources
+      select_columns = ['*', 'customers.name as name']
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def matching_params
-      params.require(:matching).permit(:customer_id, :store_id)
-    end
+    matchings = Matching.select(*select_columns).where(condition.and(mt[:enable_flg].eq(1))).joins(join_conditions).order(mt[:id].desc)
+
+    ret_data = matchings.map{ |matching| { name: matching.name } }
+  rescue => e
+    p ">>>>>>>>>>> error! : #{e}"
+    Rails.logger.error ">>>>>>>>>>> error! : #{e}"
+    ret_data = []
+  ensure
+    render json: { result: ret_data }
+  end
 end

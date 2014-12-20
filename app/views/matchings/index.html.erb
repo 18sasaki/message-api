@@ -5,6 +5,7 @@
     <tr>
       <th>Customer</th>
       <th>Store</th>
+      <th>Enable</th>
       <th></th>
     </tr>
   </thead>
@@ -12,8 +13,9 @@
   <tbody>
     <% @matchings.each do |matching| %>
       <tr>
-        <td><%= matching.customer_id %></td>
+        <td><%= matching.id %> : <%= matching.customer_id %></td>
         <td><%= matching.store_id %></td>
+        <td><%= matching.enable_flg %></td>
         <td><%= link_to 'Show', matching %></td>
       </tr>
     <% end %>

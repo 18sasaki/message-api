@@ -15,7 +15,7 @@ class Api::UsersController < Api::ApiBaseController
     end
   rescue => e
     p ">>>>>>>>>>> error! : #{e}"
-    Rails.logger.warning ">>>>>>>>>>> error! : #{e}"
+    Rails.logger.error ">>>>>>>>>>> error! : #{e}"
     result  = 'false'
     message = 'raise some error !'
   ensure
@@ -32,7 +32,7 @@ class Api::UsersController < Api::ApiBaseController
     end
   rescue => e
     p ">>>>>>>>>>> error! : #{e}"
-    Rails.logger.warning ">>>>>>>>>>> error! : #{e}"
+    Rails.logger.error ">>>>>>>>>>> error! : #{e}"
     result = 'false'
   ensure
     render json: {result: result, user_type: user_type}

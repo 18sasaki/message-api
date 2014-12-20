@@ -13,7 +13,7 @@
   <tbody>
     <% @customers.each do |customer| %>
       <tr>
-        <td><%= link_to customer.user_id, customer %></td>
+        <td><%= customer.id %> : <%= link_to customer.user_id, customer %></td>
         <td><%= customer.name %></td>
         <td><%= customer.mail_address %></td>
         <td><%= customer.memo %></td>

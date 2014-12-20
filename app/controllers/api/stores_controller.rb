@@ -14,15 +14,36 @@ class Api::StoresController < Api::ApiBaseController
     result = 'true'
   rescue => e
     p ">>>>>>>>>>> error! : #{e}"
-    Rails.logger.warning ">>>>>>>>>>> error! : #{e}"
+    Rails.logger.error ">>>>>>>>>>> error! : #{e}"
     result = 'false'
   ensure
     render json: {result: result}
   end
 
+  def get
+    store = Store.find_by(id: params[:id])
+    ret_data = store.attributes
+  rescue => e
+    p ">>>>>>>>>>> error! : #{e}"
+    Rails.logger.error ">>>>>>>>>>> error! : #{e}"
+    ret_data = {}
+  ensure
+    render json: { store: ret_data }
+  end
+
   def search
-    limit = rand(5)
+    limit = rand(1..5)
     stores = Store.all.limit(limit)
-    render json: { stores: stores.map(&:attributes)}
+
+    ret_data = []
+    stores.each do |store|
+      ret_hash = {}
+      store.attributes.each do |k, v|
+        ret_hash[k] = (v || '')
+      end
+      ret_data << ret_hash
+    end
+
+    render json: { stores: ret_data }
   end
 end
