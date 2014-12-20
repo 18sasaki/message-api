@@ -3,7 +3,7 @@ class Api::CustomersController < Api::ApiBaseController
     user  = User.find_by(user_id: params[:user_id])
     customer = Customer.find_by(user_id: user.id)
 
-    customer_params = ActionController::Parameters.new(params).permit(:user_id, :name, :address, :memo)
+    customer_params = ActionController::Parameters.new(params).permit(:user_id, :name, :mail_address, :memo)
     edit_params  = customer_params.merge(user_id: user.id)
 
     if customer.present?

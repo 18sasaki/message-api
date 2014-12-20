@@ -19,4 +19,10 @@ class Api::StoresController < Api::ApiBaseController
   ensure
     render json: {result: result}
   end
+
+  def search
+    limit = rand(5)
+    stores = Store.all.limit(limit)
+    render json: { stores: stores.map(&:attributes)}
+  end
 end
