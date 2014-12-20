@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141220072335) do
+ActiveRecord::Schema.define(version: 20141220083841) do
 
   create_table "customers", force: true do |t|
     t.integer  "user_id"
@@ -42,10 +42,10 @@ ActiveRecord::Schema.define(version: 20141220072335) do
 
   create_table "users", force: true do |t|
     t.string   "password"
-    t.string   "user_type"
+    t.integer  "user_type",  limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "user_id"
+    t.string   "user_id"
     t.string   "salt"
   end
 
