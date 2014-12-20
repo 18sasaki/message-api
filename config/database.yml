@@ -23,3 +23,11 @@ production:
   database: db/production.sqlite3
   pool: 5
   timeout: 5000
+
+production:
+  adapter: postgresql
+  encoding: utf8
+  database: d29i2ba286t0g4
+  port: 5432
+  username: tcltcysnlkttaa
+  password: tnaIhbwWeW3-8P89fEKhLhLnMx
