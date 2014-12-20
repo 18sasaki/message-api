@@ -2,9 +2,17 @@ MassageApi::Application.routes.draw do
   namespace :api do
     resources :matchings
 
-    resources :stores
+    resources :stores do
+      collection do
+        post 'edit'
+      end
+    end
 
-    resources :customers
+    resources :customers do
+      collection do
+        post 'edit'
+      end
+    end
 
     resources :users do
       collection do
