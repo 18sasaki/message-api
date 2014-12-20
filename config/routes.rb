@@ -16,8 +16,8 @@ MassageApi::Application.routes.draw do
 
     resources :users do
       collection do
-        get 'register'
-        get 'login'
+        post 'register'
+        post 'login'
       end
     end
   end

@@ -7,11 +7,15 @@ class Api::UsersController < Api::ApiBaseController
       salt     = Digest::SHA1.hexdigest("salt-#{Time.now}")
       password = Digest::SHA1.hexdigest("#{salt}--#{params[:password]}--}")
 
-      user = User.new(user_id: params[:user_id], password: password, salt: salt, user_type: params[:user_type])
+      user_params = ActionController::Parameters.new(params).permit(:user_id, :user_type)
+
+      user = User.new(user_params.merge({ password: password, salt: salt}))
       user.save!
       result = 'true'
     end
-  rescue
+  rescue => e
+    p ">>>>>>>>>>> error! : #{e}"
+    Rails.logger.warning ">>>>>>>>>>> error! : #{e}"
     result  = 'false'
     message = 'raise some error !'
   ensure
@@ -26,7 +30,9 @@ class Api::UsersController < Api::ApiBaseController
     else
       result = 'false'
     end
-  rescue
+  rescue => e
+    p ">>>>>>>>>>> error! : #{e}"
+    Rails.logger.warning ">>>>>>>>>>> error! : #{e}"
     result = 'false'
   ensure
     render json: {result: result, user_type: user_type}
