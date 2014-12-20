@@ -1,11 +1,21 @@
 MassageApi::Application.routes.draw do
-  resources :matchings
+  namespace :api do
+    resources :matchings
 
-  resources :stores
+    resources :stores
 
-  resources :customers
+    resources :customers
 
-  resources :users
+    resources :users
+  end
+
+  resources :matchings, only: [:index, :show]
+
+  resources :stores, only: [:index, :show]
+
+  resources :customers, only: [:index, :show]
+
+  resources :users, only: [:index, :show]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
