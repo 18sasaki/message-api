@@ -6,7 +6,12 @@ MassageApi::Application.routes.draw do
 
     resources :customers
 
-    resources :users
+    resources :users do
+      collection do
+        get 'register'
+        get 'login'
+      end
+    end
   end
 
   resources :matchings, only: [:index, :show]

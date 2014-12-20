@@ -1,4 +1,4 @@
-class MatchingsController < ApiBaseController
+class Api::MatchingsController < Api::ApiBaseController
   before_action :set_matching, only: [:show, :edit, :update, :destroy]
 
   # GET /matchings

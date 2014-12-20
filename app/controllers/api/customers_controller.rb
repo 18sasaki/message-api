@@ -1,4 +1,4 @@
-class CustomersController < ApiBaseController
+class Api::CustomersController < Api::ApiBaseController
   before_action :set_customer, only: [:show, :edit, :update, :destroy]
 
   # GET /customers
